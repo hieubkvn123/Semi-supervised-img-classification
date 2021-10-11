@@ -131,3 +131,7 @@ dmypy.json
 # Ignore data files and folders
 data/
 data/*
+
+# Ignore training checkpoints
+checkpoints/
+checkpoints/*
