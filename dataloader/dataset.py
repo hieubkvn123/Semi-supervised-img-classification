@@ -4,8 +4,8 @@ import glob
 import numpy as np
 import tensorflow as tf
 
-from dataset_ import *
-from tfrecord import *
+from .dataset_ import *
+from .tfrecord import *
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 
@@ -34,7 +34,10 @@ class DataLoader:
         img_paths = []
 
         for ext in extensions:
-            img_paths += glob.glob(os.path.join(directory, ext))
+            if(labels_as_subdir):
+                img_paths += glob.glob(os.path.join(directory, "*", ext))
+            else:
+                img_paths += glob.glob(os.path.join(directory, ext))
 
         if(labels_as_subdir and labels is None):
             labels = np.array([x.split('/')[-2] for x in img_paths])
