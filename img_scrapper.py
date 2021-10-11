@@ -16,7 +16,9 @@ parser.add_argument('--driver', required=True, type=str, help='Path to webdriver
 parser.add_argument('--query', required=True, type=str, help='Search query to look up')
 args = vars(parser.parse_args())
 
-driver = webdriver.Chrome(args['driver'])
+op = webdriver.ChromeOptions()
+op.add_argument('headless')
+driver = webdriver.Chrome(args['driver'], options=op)
 
 def go_to(driver, url):
 	driver.get(url)
