@@ -18,6 +18,7 @@ class DataLoader:
                  preprocess="default",
                  color_space="rgb",
                  random_noise=False,
+                 augment=False,
                  drop_remainder=True,
                  shuffle=True,
                  repeat = 1):
@@ -95,6 +96,7 @@ class DataLoader:
                                           drop_remainder=drop_remainder,
                                           map_fn=self.map_fn,
                                           shuffle=shuffle,
+                                          augment=augment,
                                           repeat=repeat)
         
         self.val_dataset = disk_image_batch_dataset(val_img_paths,
@@ -103,6 +105,7 @@ class DataLoader:
                                           drop_remainder=drop_remainder,
                                           map_fn=self.map_fn,
                                           shuffle=shuffle,
+                                          augment=augment,
                                           repeat=repeat)
 
         self.img_shape = (img_size, img_size, 3)
