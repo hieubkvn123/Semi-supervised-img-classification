@@ -21,3 +21,18 @@ Where :
  * driver : Path to the web driver (Chrome)
  * dir : The directory to save the downloaded images
  * num-imgs : Number of images to download
+
+For example :
+```bash
+python3 img_scrapper.py --query GermanShepherd --driver ./chromedriver --dir data/unlabelled --num-imgs 1000
+```
+
+Output : 
+```
+[INFO] Query inserted, waiting for 2 seconds ...
+    --> Downloading image #[1/1000]
+    --> Downloading image #[2/1000]
+    --> Downloading image #[3/1000]
+    --> Downloading image #[4/1000]
+    --> Downloading image #[5/1000]
+```
