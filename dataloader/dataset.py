@@ -108,11 +108,23 @@ class DataLoader:
                                           augment=augment,
                                           repeat=repeat)
 
+        self.train_dataset_len = len(train_img_paths)
+        self.steps_per_epoch = self.train_dataset_len // self.batch_size
+        self.val_steps = len(val_img_paths) // self.batch_size
         self.img_shape = (img_size, img_size, 3)
         self.dataset_len = len(img_paths) // self.batch_size
 
     def get_train_dataset(self):
         return self.train_dataset
+
+    def get_steps_per_epoch(self):
+        return self.steps_per_epoch
+
+    def get_val_steps(self):
+        return self.val_steps
+
+    def get_train_dataset_len(self):
+        return self.train_dataset_len
 
     def get_val_dataset(self):
         return self.val_dataset
