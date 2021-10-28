@@ -7,6 +7,7 @@ import pandas as pd
 import tensorflow as tf
 from tensorflow.keras.layers import *
 from tensorflow.keras.models import Model
+from tensorflow.keras.optimizers import Adam
 from tensorflow.keras import backend as K
 from tensorflow.keras.losses import MeanSquaredError, BinaryCrossentropy
 
@@ -29,7 +30,7 @@ class PiModel:
         self.val_steps = val_steps
         self.save_steps = save_steps
         self.callbacks = callbacks
-        self.bce = BinaryCrossEntropy(from_logits=False)
+        self.bce = BinaryCrossentropy(from_logits=False)
         self.mse = MeanSquaredError()
 
         ### For sigmoid rampup weight function ###
@@ -43,13 +44,13 @@ class PiModel:
 
         if(t == 0):
             return 0
-        elif(epoch >= max_epochs):
+        elif(t >= self.Tmax):
             return max_val
 
         return max_val * np.exp(-5 * (1 - t/self.Tmax) ** 2)
 
     @tf.function
-    def train_step(model, opt, batch, epoch):
+    def train_step(self, model, opt, batch, epoch):
         with tf.GradientTape() as tape:
             weak_aug, strong_aug, labels = batch
 
@@ -106,12 +107,12 @@ class PiModel:
         train_losses = []
         val_losses = []
         for i in range(self.epochs):
-            print(f'Epoch #[{i+1}/{epochs}]')
+            print(f'Epoch #[{i+1}/{self.epochs}]')
 
             ### Run through train supervised data directory ###
             with tqdm.tqdm(total=self.steps_per_epoch) as pbar:
                 for batch in self.train_dataset:
-                    train_loss = self.train_step(self.model, optimizer, batch, step=i+1)
+                    train_loss = self.train_step(self.model, optimizer, batch, i+1)
                     train_loss = train_loss.numpy()
 
                     train_losses.append(train_loss)
@@ -146,5 +147,5 @@ class PiModel:
             # Save models
             if((i + 1) % self.save_steps == 0):
                 print('[INFO] Checkpointing weights ...')
-                self.model.save_weights(os.path.join(self.save_path, self.model_name, 'hdf5')
+                self.model.save_weights(os.path.join(self.save_path, self.model_name, 'hdf5'))
 
