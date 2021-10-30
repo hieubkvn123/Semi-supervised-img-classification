@@ -23,8 +23,8 @@ print(model.summary())
 
 # 2. Build the dataloader
 print('[INFO] Building data loader for supervised and unsupervised datasets...')
-loader1 = DataLoader(args['input_1'], one_hot=True, augment=True, labels_as_subdir=True, batch_size=16)
-loader2 = DataLoader(args['input_2'], one_hot=True, augment=True, labels_as_subdir=False, batch_size=16)
+loader1 = DataLoader(args['input_1'], one_hot=True, augment=True, labels_as_subdir=True, batch_size=32)
+loader2 = DataLoader(args['input_2'], one_hot=True, augment=True, labels_as_subdir=False, batch_size=32)
 
 # 3. Build the trainer
 print('[INFO] Building the trainer...')

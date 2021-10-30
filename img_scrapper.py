@@ -113,7 +113,7 @@ def find_and_download(driver, class_name, folder='images', prefix='img', num_to_
             print('[INFO] Download completed!')
 
 if __name__ == '__main__':
-    input_xpath = '/html/body/div[2]/div[2]/div/form/div[1]/div[1]/div[1]/div/div[2]/input'
+    input_xpath = '/html/body/div[1]/div[3]/form/div[1]/div[1]/div[1]/div/div[2]/input'
     img_class = 'rg_i'
 
     go_to(driver, 'https://www.google.com/imghp?hl=EN')

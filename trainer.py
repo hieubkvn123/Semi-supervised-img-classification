@@ -99,7 +99,7 @@ class PiModel:
     @tf.function
     def val_step(self, model, batch):
         weak_aug, strong_aug, labels = batch
-        predictions, logits = model(images, training=False)
+        predictions, logits = model(weak_aug, training=False)
         loss = self.bce(labels, predictions)
 
         return loss
