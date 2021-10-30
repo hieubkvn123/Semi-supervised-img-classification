@@ -29,6 +29,7 @@ loader2 = DataLoader(args['input_2'], one_hot=True, augment=True, labels_as_subd
 # 3. Build the trainer
 print('[INFO] Building the trainer...')
 trainer = PiModel(model, loader1, loader2)
+print(trainer)
 
 # 4. Start training
 print('[INFO] Training starting...')

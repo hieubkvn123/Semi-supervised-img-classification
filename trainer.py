@@ -26,8 +26,6 @@ class PiModel:
         self.save_path = save_path
         self.epochs = epochs
         self.lr = lr
-        self.steps_per_epoch = steps_per_epoch
-        self.val_steps = val_steps
         self.save_steps = save_steps
         self.callbacks = callbacks
         self.bce = BinaryCrossentropy(from_logits=False)
@@ -38,6 +36,16 @@ class PiModel:
         self.max_val = 30
         self.n_labelled = n_labelled
         self.n_total = n_total
+
+    def __str__(self):
+        string = f'[*] Number of epochs = {self.epochs}\n'
+        string += f'[*] Steps per epoch for supervised dataset = {self.steps_per_epoch}\n'
+        string += f'[*] Steps per epoch for unsupervised dataset = {self.unsupervised_steps}\n'
+        string += f'[*] Steps for validation = {self.val_steps}\n'
+        string += f'[*] Model name = {self.model_name}\n'
+        string += f'[*] Check point path = {self.save_path}\n'
+
+        return string 
 
     def sigmoid_rampup(self, t):
         max_val = self.max_val * (self.n_labelled / self.n_total)
@@ -73,7 +81,7 @@ class PiModel:
         return loss
 
     @tf.function
-    def train_step_unsupervised(model, opt, batch, epoch):
+    def train_step_unsupervised(self, model, opt, batch, epoch):
         with tf.GradientTape() as tape:
             weak_aug, strong_aug = batch
 
@@ -89,7 +97,7 @@ class PiModel:
         return loss
 
     @tf.function
-    def val_step(model, batch):
+    def val_step(self, model, batch):
         weak_aug, strong_aug, labels = batch
         predictions, logits = model(images, training=False)
         loss = self.bce(labels, predictions)
@@ -124,7 +132,6 @@ class PiModel:
                 with tqdm.tqdm(total=self.unsupervised_steps, colour='red') as pbar:
                     for batch in self.u_dataset:
                         unsupervised_loss = self.train_step_unsupervised(self.model, optimizer, batch, i+1)
-                        global_step += 1
                         unsupervised_loss = unsupervised_loss.numpy()
 
                         pbar.set_postfix({'unsupervised_loss' : f'{unsupervised_loss:.4f}'})
@@ -132,7 +139,7 @@ class PiModel:
 
             ### Run through val supervised data directory ###
             with tqdm.tqdm(total=self.val_steps, colour='green') as pbar:
-                for batch in val_dataset:
+                for batch in self.val_dataset:
                     val_loss = self.val_step(self.model, batch)
                     val_loss = val_loss.numpy()
 
