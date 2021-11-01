@@ -18,7 +18,7 @@ input_dim = (args['input_size'], args['input_size'], 3)
 
 # 1. Build the model
 print('[INFO] Building the model...')
-model = build_cls_model(input_dim)
+model = build_cls_model(input_dim, n_classes=10)
 print(model.summary())
 
 # 2. Build the dataloader
